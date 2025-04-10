@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Job Assistant Icon Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .icon-container {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .instructions {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>DeepSeek Job Assistant Icon Generator</h1>
+  
+  <div class="instructions">
+    <h3>Instructions:</h3>
+    <p>1. The icons below represent the three sizes needed for your Chrome extension (16px, 48px, and 128px).</p>
+    <p>2. Click the "Download All Icons" button to download all three icons as PNG files.</p>
+    <p>3. Move the downloaded PNG files to your extension's 'images' folder.</p>
+  </div>
+  
+  <div class="icon-container">
+    <div class="icon">
+      <canvas id="icon16" width="16" height="16"></canvas>
+      <p>icon16.png</p>
+      <button onclick="downloadIcon(16)">Download</button>
+    </div>
+    <div class="icon">
+      <canvas id="icon48" width="48" height="48"></canvas>
+      <p>icon48.png</p>
+      <button onclick="downloadIcon(48)">Download</button>
+    </div>
+    <div class="icon">
+      <canvas id="icon128" width="128" height="128"></canvas>
+      <p>icon128.png</p>
+      <button onclick="downloadIcon(128)">Download</button>
+    </div>
+  </div>
+  
+  <div style="text-align: center;">
+    <button onclick="downloadAllIcons()">Download All Icons</button>
+  </div>
+  
+  <script>
+    // Function to draw the icon on a canvas
+    function drawIcon(size) {
+      const canvas = document.getElementById(`icon${size}`);
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+      
+      // Draw background circle
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size*0.45, 0, Math.PI * 2);
+      ctx.fillStyle = '#3498db';
+      ctx.fill();
+      ctx.lineWidth = size*0.02;
+      ctx.strokeStyle = '#2980b9';
+      ctx.stroke();
+      
+      // Draw "D" letter
+      ctx.fillStyle = 'white';
+      ctx.font = `bold ${size*0.5}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('D', size/2, size/2 + size*0.05);
+      
+      // Draw "J" letter below (for Job Assistant)
+      ctx.fillStyle = 'white'; 
+      ctx.font = `bold ${size*0.3}px Arial`;
+      ctx.fillText('J', size/2, size/2 + size*0.25);
+    }
+    
+    // Function to download a single icon
+    function downloadIcon(size) {
+      const canvas = document.getElementById(`icon${size}`);
+      const link = document.createElement('a');
+      link.download = `icon${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    
+    // Function to download all icons
+    function downloadAllIcons() {
+      downloadIcon(16);
+      downloadIcon(48);
+      downloadIcon(128);
+    }
+    
+    // Draw all icons when page loads
+    window.onload = function() {
+      drawIcon(16);
+      drawIcon(48);
+      drawIcon(128);
+    };
+  </script>
+</body>
+</html>

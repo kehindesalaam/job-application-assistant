@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Job Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      width: 400px;
+      color: #333;
+    }
+    
+    h1 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+    }
+    
+    h1 img {
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    
+    .tab-container {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 10px 15px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #7f8c8d;
+      position: relative;
+    }
+    
+    .tab.active {
+      color: #3498db;
+    }
+    
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #3498db;
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* Enhanced styling for the context tab */
+  #context-tab {
+    position: relative;
+  }
+  
+  #context-tab::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 8px;
+    height: 8px;
+    background-color: #3498db;
+    border-radius: 50%;
+    display: none;
+  }
+  
+  #context-tab.has-content::after {
+    display: block;
+  }
+    
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 10px;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    button:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+    }
+    
+    button.secondary {
+      background-color: #ecf0f1;
+      color: #7f8c8d;
+      border: 1px solid #ddd;
+    }
+    
+    button.secondary:hover {
+      background-color: #dfe6e9;
+    }
+    
+    .button-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+    
+    .status {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .status.pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .copy-row {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    
+    .copy-notification {
+      margin-left: 10px;
+      color: #27ae60;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .copy-notification.visible {
+      opacity: 1;
+    }
+    
+    .upload-container {
+      margin-bottom: 15px;
+      padding: 15px;
+      border: 2px dashed #ddd;
+      border-radius: 4px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    
+    .upload-container:hover {
+      border-color: #3498db;
+    }
+    
+    .file-input-label {
+      display: inline-block;
+      padding: 8px 15px;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    
+    .file-input-label:hover {
+      background-color: #dfe6e9;
+    }
+    
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    
+    .upload-note {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-top: 10px;
+    }
+    
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      color: #95a5a6;
+      font-size: 14px;
+    }
+    
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #ddd;
+    }
+    
+    .or-divider::before {
+      margin-right: 10px;
+    }
+    
+    .or-divider::after {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="images/icon48.png" alt="Logo">
+    DeepSeek Job Assistant
+  </h1>
+  
+  <div class="tab-container">
+    <button class="tab active" id="cv-tab">CV Management</button>
+    <button class="tab" id="api-tab">API Settings</button>
+    <button class="tab" id="cover-letter-tab">Cover Letter</button>
+    <button class="tab" id="context-tab">Saved Context</button>
+  </div>
+  
+  <!-- CV Management Tab -->
+  <div class="tab-content active" id="cv-content">
+    <div class="form-group">
+      <label>Upload your CV/Resume:</label>
+      <div class="upload-container">
+        <label for="cv-file" class="file-input-label">Choose File</label>
+        <input type="file" id="cv-file" class="file-input" accept=".txt,.pdf,.doc,.docx,.rtf">
+        <p id="file-name" style="margin-top: 10px; font-size: 14px;">No file selected</p>
+        <p class="upload-note">Supported formats: TXT, PDF, DOC, DOCX, RTF</p>
+      </div>
+    </div>
+    
+    <div class="or-divider">OR</div>
+    
+    <div class="form-group">
+      <label for="cv-textarea">Paste your CV/Resume text:</label>
+      <textarea id="cv-textarea" placeholder="Enter your CV or resume text here..."></textarea>
+    </div>
+    
+    <div class="button-row">
+      <button id="save-cv">Save CV</button>
+    </div>
+    
+    <div id="cv-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <!-- API Settings Tab -->
+  <div class="tab-content" id="api-content">
+    <div class="form-group">
+      <label for="api-key-input">DeepSeek API Key:</label>
+      <input type="text" id="api-key-input" placeholder="Enter your DeepSeek API key here...">
+      <p style="font-size: 12px; color: #7f8c8d; margin-top: -10px;">
+        Your API key is stored locally and is only sent to DeepSeek when making requests.
+      </p>
+    </div>
+    
+    <div class="form-group" style="margin-top: 20px;">
+      <label style="font-weight: 600; margin-bottom: 10px; display: block;">AI Model Selection:</label>
+      
+      <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+        <label style="display: flex; align-items: center; cursor: pointer;">
+          <input type="radio" name="popup-model-selection" id="model-chat" value="deepseek-chat" checked>
+          <span style="margin-left: 8px;">DeepSeek Chat</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; cursor: pointer;">
+          <input type="radio" name="popup-model-selection" id="model-reasoner" value="deepseek-reasoner">
+          <span style="margin-left: 8px;">DeepSeek Reasoner</span>
+        </label>
+      </div>
+      
+      <div style="background-color: #f8f9fa; padding: 12px; border-radius: 4px; margin-top: 10px; font-size: 12px;">
+        <p style="margin: 0 0 6px 0; font-weight: 600;">Model Capabilities:</p>
+        <p style="margin: 0 0 5px 0;"><strong>Chat:</strong> Better for conversational responses and general cover letters.</p>
+        <p style="margin: 0;"><strong>Reasoner:</strong> Enhanced logical reasoning for well-structured arguments.</p>
+      </div>
+    </div>
+    
+    <div class="form-group" style="margin-top: 20px;">
+      <label style="font-weight: 600; margin-bottom: 10px; display: block;">Maximum Word Count:</label>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="range" id="popup-word-count-slider" min="50" max="1000" step="50" value="300" style="flex-grow: 1;">
+        <input type="number" id="popup-word-count-input" min="50" max="1000" value="300" style="width: 60px; text-align: center;">
+      </div>
+      <p style="font-size: 12px; color: #7f8c8d; margin-top: 5px;">
+        Limit the length of AI-generated responses.
+      </p>
+    </div>
+    
+    <div class="button-row" style="margin-top: 15px;">
+      <button id="save-api-settings">Save API Settings</button>
+    </div>
+    
+    <div id="api-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <!-- Cover Letter Tab -->
+  <div class="tab-content" id="cover-letter-content">
+    <div class="form-group">
+      <label for="job-description">Job Description:</label>
+      <textarea id="job-description" placeholder="Paste the job description here or use the 'Extract from Page' button..."></textarea>
+    </div>
+    
+    <div class="button-row" style="margin-bottom: 15px;">
+      <button class="secondary" id="extract-job">Extract from Page</button>
+      <button id="generate-cover-letter">Generate Cover Letter</button>
+    </div>
+    
+    <div class="checkbox-row" style="margin-bottom: 15px;">
+      <label class="checkbox-label">
+        <input type="checkbox" id="append-to-context-check">
+        Add to saved context
+      </label>
+      <span class="tooltip" title="If checked, extracted job descriptions will be added to your saved context for use across multiple pages.">ⓘ</span>
+    </div>
+    
+    <div class="checkbox-row" style="margin-bottom: 15px;">
+      <label class="checkbox-label">
+        <input type="checkbox" id="use-existing-context-check">
+        Use saved context when generating
+      </label>
+      <span class="tooltip" title="If checked, cover letter generation will use all your saved context rather than just the current job description.">ⓘ</span>
+    </div>
+    
+    <div style="margin-bottom: 20px;">
+      <h4 style="margin-bottom: 10px; color: #3498db;">Context Management</h4>
+      <p style="font-size: 13px; color: #7f8c8d; margin-bottom: 10px;">
+        View and use context collected from multiple pages to generate more personalized responses:
+      </p>
+      <div class="button-row">
+        <button class="secondary" id="check-saved-context">Check for Saved Context</button>
+        <button id="generate-from-saved">Use Saved Context Only</button>
+      </div>
+    </div>
+    
+    <div id="cover-letter-status" class="status" style="display: none;"></div>
+    
+    <div class="form-group" id="result-container" style="display: none;">
+      <label for="result-textarea">Generated Cover Letter:</label>
+      <textarea id="result-textarea" readonly></textarea>
+      
+      <div class="copy-row">
+        <button id="copy-result">Copy to Clipboard</button>
+        <span id="copy-notification" class="copy-notification">Copied!</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Saved Context Tab -->
+  <div class="tab-content" id="context-content">
+    <div class="form-group">
+      <label for="saved-context-textarea">Saved Context:</label>
+      <textarea id="saved-context-textarea" placeholder="No context saved yet. Use 'Append to job context' from the right-click menu or extract job descriptions with the 'Also add to saved context' option checked." readonly></textarea>
+    </div>
+    
+    <div class="button-row">
+      <button class="secondary" id="refresh-context">Refresh Context</button>
+      <button id="clear-context">Clear Context</button>
+    </div>
+    
+    <div class="info-box" style="margin-top: 15px; font-size: 13px; color: #7f8c8d; background: #f5f7fa; padding: 10px; border-radius: 4px;">
+      <p><strong>About Context:</strong> Context is information about companies and jobs that helps DeepSeek generate more relevant responses. Add to it using the right-click menu or when extracting job descriptions.</p>
+    </div>
+    
+    <div id="context-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

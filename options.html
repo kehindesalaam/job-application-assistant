@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DeepSeek Job Assistant - Settings</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 30px;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    h1 {
+      font-size: 24px;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+    
+    h1 img {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+    }
+    
+    h2 {
+      font-size: 20px;
+      margin: 25px 0 10px;
+      color: #3498db;
+    }
+    
+    .settings-card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+    
+    textarea {
+      width: 100%;
+      min-height: 250px;
+      padding: 15px;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 15px;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+    }
+    
+    .form-description {
+      margin-bottom: 15px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+    
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+      font-size: 16px;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    .upload-container {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 2px dashed #ddd;
+      border-radius: 4px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    
+    .upload-container:hover {
+      border-color: #3498db;
+    }
+    
+    .file-input-label {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ecf0f1;
+      color: #2c3e50;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    
+    .file-input-label:hover {
+      background-color: #dfe6e9;
+    }
+    
+    .file-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    
+    .upload-note {
+      font-size: 13px;
+      color: #7f8c8d;
+      margin-top: 10px;
+    }
+    
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #95a5a6;
+      font-size: 14px;
+    }
+    
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #ddd;
+    }
+    
+    .or-divider::before {
+      margin-right: 10px;
+    }
+    
+    .or-divider::after {
+      margin-left: 10px;
+    }
+    
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="images/icon48.png" alt="Logo">
+    DeepSeek Job Assistant Settings
+  </h1>
+  
+  <p>Configure your settings to get the most out of DeepSeek Job Assistant.</p>
+  
+  <div class="settings-card">
+    <h2>CV / Resume Management</h2>
+    <p class="form-description">Your CV will be used to generate personalized responses and cover letters. It's stored locally in your browser and only sent to DeepSeek when generating content.</p>
+    
+    <div class="upload-container">
+      <label for="cv-file" class="file-input-label">Upload CV File</label>
+      <input type="file" id="cv-file" class="file-input" accept=".txt,.pdf,.doc,.docx,.rtf">
+      <p id="file-name" style="margin-top: 10px; font-size: 14px;">No file selected</p>
+      <p class="upload-note">Supported formats: TXT, PDF, DOC, DOCX, RTF</p>
+    </div>
+    
+    <div class="or-divider">OR</div>
+    
+    <label for="cv-textarea">Paste your CV/Resume text:</label>
+    <textarea id="cv-textarea" placeholder="Enter your CV or resume text here..."></textarea>
+    
+    <button id="save-cv">Save CV</button>
+    <div id="cv-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <div class="settings-card">
+    <h2>DeepSeek API Key</h2>
+    <p class="form-description">Your DeepSeek API key is required to generate responses. It's stored locally in your browser and used only for making requests to DeepSeek.</p>
+    
+    <label for="api-key-input">DeepSeek API Key:</label>
+    <input type="text" id="api-key-input" placeholder="Enter your DeepSeek API key here...">
+    <p class="form-description">Get your API key from the <a href="https://api-docs.deepseek.com/" target="_blank">DeepSeek API portal</a>.</p>
+    
+    <button id="save-api-key">Save API Key</button>
+    <div id="api-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <div class="settings-card">
+    <h2>AI Model Settings</h2>
+    <p class="form-description">Configure DeepSeek model settings for generating responses and cover letters.</p>
+    
+    <div style="margin-bottom: 20px;">
+      <label style="font-weight: 600; margin-bottom: 10px; display: block;">Select DeepSeek Model:</label>
+      
+      <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+        <label style="display: flex; align-items: center; cursor: pointer;">
+          <input type="radio" name="model-selection" value="deepseek-chat" checked>
+          <span style="margin-left: 8px;">DeepSeek Chat</span>
+        </label>
+        
+        <label style="display: flex; align-items: center; cursor: pointer;">
+          <input type="radio" name="model-selection" value="deepseek-reasoner">
+          <span style="margin-left: 8px;">DeepSeek Reasoner</span>
+        </label>
+      </div>
+      
+      <div style="background-color: #f8f9fa; padding: 12px; border-radius: 4px; margin-top: 10px; margin-bottom: 20px;">
+        <p style="margin: 0 0 10px 0; font-weight: 600;">Model Capabilities:</p>
+        <p style="margin: 0 0 5px 0; font-size: 13px;"><strong>DeepSeek Chat:</strong> Better for conversational responses and general cover letter generation.</p>
+        <p style="margin: 0; font-size: 13px;"><strong>DeepSeek Reasoner:</strong> Enhanced logical reasoning for crafting well-structured arguments in responses.</p>
+      </div>
+      
+      <label style="font-weight: 600; margin-bottom: 10px; display: block;">Maximum Word Count:</label>
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+        <input type="range" id="word-count-slider" min="50" max="1000" step="50" value="300" style="flex-grow: 1;">
+        <input type="number" id="word-count-input" min="50" max="1000" value="300" style="width: 80px; text-align: center;">
+      </div>
+      <p style="font-size: 13px; color: #7f8c8d; margin-top: 5px;">
+        Set the maximum word count for generated responses and cover letters.
+      </p>
+    </div>
+    
+    <button id="save-model-settings">Save Model Settings</button>
+    <div id="model-status" class="status" style="display: none;"></div>
+  </div>
+  
+  <footer>
+    DeepSeek Job Assistant v1.0.0 | Built with ❤️ for job seekers
+  </footer>
+  
+  <script src="options.js"></script>
+</body>
+</html>
